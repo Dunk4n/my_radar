@@ -5,6 +5,7 @@
 ** try not to segfault, good luck :)
 */
 
+#include <stdlib.h>
 #include "radar.h"
 
 void    put_pixel(my_framebuff_t *framebuff, int x, int y, sfColor color)
@@ -50,23 +51,6 @@ sfColor color)
         j = 0;
         while (j < size.y) {
             put_pixel(buff, pos.x + j, pos.y + i, color);
-            j++;
-        }
-        i++;
-    }
-}
-
-void    hitbox(my_framebuff_t *buff, sfVector2f pos, sfVector2i size,
-sfColor color)
-{
-    int i = 0;
-    int j = 0;
-
-    while (i < size.x) {
-        j = 0;
-        while (j < size.y) {
-            ((i < 2 || i > 18) || (j < 2 || j > 18)) ?
-put_pixel(buff, pos.x + j, pos.y + i, color) : 0;
             j++;
         }
         i++;

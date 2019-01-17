@@ -5,7 +5,34 @@
 ** try not to segfault, good luck :)
 */
 
+#include <math.h>
 #include "radar.h"
+
+void    settab(my_map_t *map, int nb)
+{
+    int i = 0;
+    int m = 0;
+
+    while (i < map->nb_trans) {
+        if (map->trans[i].dead == 0 && is_collision(map->trans[i].rectp,
+map->trans[i].alp, map->split[nb].rect, 0)) {
+            (map->split[nb].tab[m] = &(map->trans[i]));
+            m++;
+        }
+        i++;
+    }
+    map->split[nb].tab[m] = NULL;
+}
+
+void    re_settab(my_map_t *map)
+{
+    int i = 0;
+
+    while (i < SP) {
+        settab(map, i);
+        i++;
+    }
+}
 
 void    bordure(trans_t *trans)
 {
@@ -25,13 +52,14 @@ void    move_transport(trans_t *trans, int nbt)
     int i = 0;
 
     while (i < nbt) {
-        /*if ((trans[i]).dead == 0 && ((ABS((trans[i]).pos.x -
-(trans[i]).pos_arv.x) < ABS((trans[i]).pos.x + (trans[i]).vit.x -
-(trans[i]).pos_arv.x) || ABS((trans[i]).pos.y - (trans[i]).pos_arv.y) <
-ABS((trans[i]).pos.y + (trans[i]).vit.y - (trans[i]).pos_arv.y)) ||
-((trans[i]).pos.x == (trans[i]).pos_arv.x && (trans[i]).pos.y ==
-(trans[i]).pos_arv.y)))
-            (trans[i]).dead = 1;*/
+        if ((trans[i].dead == 0 && ((ABS(trans[i].pos.x -
+trans[i].pos_arv.x) < ABS(trans[i].pos.x + trans[i].vit.x -
+trans[i].pos_arv.x) || ABS(trans[i].pos.y - trans[i].pos_arv.y) <
+ABS(trans[i].pos.y + trans[i].vit.y - trans[i].pos_arv.y)) ||
+(trans[i].pos.x == trans[i].pos_arv.x && trans[i].pos.y ==
+trans[i].pos_arv.y))) && pow(ABS(trans[i].pos.x - trans[i].pos_arv.x), 2)
++ pow(ABS(trans[i].pos.y - trans[i].pos_arv.y), 2) < 100)
+            (trans[i]).dead = 1;
         if ((trans[i]).dead == 0) {
             bordure(&(trans[i]));
             (trans[i]).pos.x += (trans[i]).vit.x;
@@ -50,9 +78,12 @@ void    make_time(my_map_t *map)
     if (sfTime_asMilliseconds(sfClock_getElapsedTime(map->clock)) >= map->fgt) {
         all_collision(map);
         move_transport(map->trans, map->nb_trans);
+        re_settab(map);
         map->fgt += 16;
     }
     if (sfTime_asMilliseconds(sfClock_getElapsedTime(map->clock)) >= map->fgd) {
+        make_txt(map);
+        (map->fg_bullet > 0) ? map->fg_bullet-- : 0;
         while (++i < map->nb_trans) {
             if (map->trans[i].tmp == 0)
                 map->trans[i].dead = 0;

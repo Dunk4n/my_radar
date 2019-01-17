@@ -86,5 +86,6 @@ void const *data_ref, int (*cmp)());
 void    add_in_sorted_list(linked_list_t **begin, void *data, int (*cmp)());
 char    *get_next_line(int fd);
 double  my_getfloat(char const *str);
+char    *my_itoa(int nb);
 
 #endif

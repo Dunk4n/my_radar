@@ -72,36 +72,37 @@ int     is_collision(sfIntRect r1, float alp1, sfIntRect r2, float alp2)
     return (0);
 }
 
-void    collision(linked_list_t *a, linked_list_t *b, my_map_t *map)
+void    collision(trans_t *a, trans_t *b, my_map_t *map)
 {
-    if (((trans_t*)(a->data))->dead == 1 || ((trans_t*)(b->data))->dead == 1)
+    if (a->dead == 1 || b->dead == 1 || a->name == b->name)
         return ;
-    if (a != b && is_collision(((trans_t*)(a->data))->rectp,
-((trans_t*)(a->data))->alp, ((trans_t*)(b->data))->rectp,
-((trans_t*)(b->data))->alp) && !collision_circle(((trans_t*)(a->data)), map)
-&& !collision_circle(((trans_t*)(b->data)), map)) {
-        ((trans_t*)(a->data))->dead = 1;
-        ((trans_t*)(b->data))->dead = 1;
+    if (is_collision(a->rectp, a->alp, b->rectp, b->alp) &&
+!collision_circle(a, map) && !collision_circle(b, map)) {
+        a->pv -= 1;
+        b->pv -= 1;
+        if (a->pv == 0)
+            a->dead = 1;
+        if (b->pv == 0)
+            b->dead = 1;
     }
 }
 
 void    all_collision(my_map_t *map)
 {
     int i = 0;
-    linked_list_t *a;
-    linked_list_t *b;
+    int a = 0;
+    int b = 0;
 
     while (i < SP) {
-        a = (map->split[i]).list;
-        while (a != NULL) {
-            b = (map->split[i]).list;
-            while (b != NULL) {
-                collision(a, b, map);
-                b = b->next;
+        a = 0;
+        while (map->split[i].tab[a] != NULL) {
+            b = 0;
+            while (map->split[i].tab[b] != NULL) {
+                collision(map->split[i].tab[a], map->split[i].tab[b], map);
+                b++;
             }
-            a = a->next;
+            a++;
         }
-        delete_dead(&((map->split[i]).list));
         i++;
     }
 }

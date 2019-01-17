@@ -16,9 +16,11 @@ void const *data_ref, int (*cmp)())
 
     if (begin == NULL)
         return (NULL);
+    if ((*cmp)(begin, data_ref) == 0)
+        return ((linked_list_t*)begin);
     tmp = *begin;
     p = &tmp;
-    while (p != NULL) {
+    while (p->next != NULL) {
         if ((*cmp)(p->data, data_ref) == 0)
             return (p);
         p = p->next;

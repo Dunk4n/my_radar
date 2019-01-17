@@ -18,9 +18,11 @@ SRC	=	$(D_SRC)main.c			\
 		$(D_SRC)draw.c			\
 		$(D_SRC)line.c			\
 		$(D_SRC)time.c			\
-		$(D_SRC)delete.c		\
+		$(D_SRC)set_img.c		\
 		$(D_SRC)colision.c		\
 		$(D_SRC)collision_circle.c	\
+		$(D_SRC)txt.c			\
+		$(D_SRC)bullet.c		\
 		$(D_SRC)check.c
 
 OBJ	=	$(SRC:%.c=%.o)

@@ -6,7 +6,9 @@
 */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "my.h"
+#include "radar.h"
 
 int deletes_nodes(linked_list_t **begin, void const *data_ref, int (*cmp)())
 {
@@ -16,16 +18,19 @@ int deletes_nodes(linked_list_t **begin, void const *data_ref, int (*cmp)())
     if (begin == NULL || *begin == NULL)
         return (0);
     tmp = *begin;
-    while ((*cmp)(tmp->data, data_ref) == 0) {
-        delet = (*begin)->next;
-        (*begin)->data = ((*begin)->next)->data;
-        (*begin)->next = ((*begin)->next)->next;
-        free(delet);
+    if ((*cmp)(tmp->data, data_ref) == 1) {
+        *begin = (*begin)->next;
+        free(tmp);
+        return(0);
     }
-    while (tmp->next != NULL) {
-        while ((*cmp)((tmp->next)->data, data_ref) == 0) {
-            tmp->next = (tmp->next)->next;
+    delet = tmp->next;
+    while (delet) {
+        if (delet && (*cmp)(delet->data, data_ref) == 1) {
+            tmp->next = delet->next;
+            free(delet);
+            return (0);
         }
+        delet = delet->next;
         tmp = tmp->next;
     }
     return (0);

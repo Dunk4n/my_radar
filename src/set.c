@@ -35,24 +35,40 @@ my_window_t     *set_window(my_window_t *win)
     sfVideoMode     video_mode;
 
     win->texture = sfTexture_create(LM, HM);
+    win->txpixel = sfTexture_create(LM, HM);
     win->sprite = sfSprite_create();
+    win->sppixel = sfSprite_create();
     video_mode.width = LM;
     video_mode.height = HM;
     video_mode.bitsPerPixel = 32;
     win->window = sfRenderWindow_create(video_mode, "radar",
 sfFullscreen, NULL);
-    //win->texture = sfTexture_createFromFile("doc/AAA.png", NULL);
+    win->texture = sfTexture_createFromFile("doc/AAA.png", NULL);
     sfSprite_setTexture(win->sprite, win->texture, sfTrue);
+    sfSprite_setTexture(win->sppixel, win->txpixel, sfTrue);
     sfRenderWindow_setFramerateLimit(win->window, 60);
     if ((win->framebuff = my_framebuff_create(LM, HM)) == NULL)
         return (NULL);
     return (win);
 }
 
+void            set_txt(my_map_t *map)
+{
+    sfVector2f pos = {1660, 0};
+
+    map->txt = sfText_create();
+    sfFont *font = sfFont_createFromFile("doc/ttf-menlo-bold.ttf");
+    sfText_setString(map->txt, "000");
+    sfText_setFont(map->txt, font);
+    sfText_setCharacterSize(map->txt, 80);
+    sfText_setColor(map->txt, sfRed);
+    sfText_setPosition(map->txt, pos);
+}
+
 my_map_t        *set_map(char *str)
 {
-    my_map_t *map = malloc(sizeof(my_map_t));
-    int j = 1;
+    my_map_t    *map = malloc(sizeof(my_map_t));
+    int         j = 1;
 
     set_all_obj(map, str);
     if (map->trans == NULL) {
@@ -60,6 +76,7 @@ my_map_t        *set_map(char *str)
         free(map);
         return (NULL);
     }
+    set_txt(map);
     map->win = malloc(sizeof(my_window_t));
     map->win = set_window(map->win);
     map->split = malloc(sizeof(split_t) * SP);

@@ -36,6 +36,14 @@ void    check(my_map_t *map)
             sfRenderWindow_close(map->win->window);
             return ;
         }
+        if ((map->win->event).key.code == sfKeyX && map->fg_bullet == 0) {
+            bullet(map, 0, 1);
+            return ;
+        }
+        if ((map->win->event).key.code == sfKeyZ && map->fg_bullet == 0) {
+            bullet(map, 0, 0);
+            return ;
+        }
         if (check_key(map) == 1)
             return ;
     }
