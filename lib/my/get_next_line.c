@@ -7,100 +7,64 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+#include "my.h"
 
-int     back_slashn(char *buff, int size)
+int     nb_malloc(int *bsn, char *line, char *buff)
 {
-    int i = 0;
+    int         size = -1;
+    int         i = 0;
 
-    while (buff[i] != '\0' && i < size) {
-        if (buff[i] == '\0' || buff[i] == '\n')
-            return (i);
-        i++;
-    }
-    return (-1);
+    while (line && line[i++]);
+    while (buff && buff[++size] && buff[size] != '\n');
+    *bsn = (buff && buff[size] == '\n') ? 1 : 0;
+    return (i + size + 1);
 }
 
-char    *concat(char *buff, char *line, int size)
+char    *next_line(int fd, char *line, char *buff)
 {
-    int     cnt[] = {0, 0, 0};
-    char    *tmp;
+    char        *relloc = NULL;
+    int         tab[3] = {0, 0, 0};
 
-    while (line && line[cnt[0]++]);
-    size += cnt[0];
-    if ((tmp = malloc(size)) == NULL)
+    if ((relloc = malloc(nb_malloc(&(tab[2]), line, buff))) == NULL)
         return (NULL);
-    while (line && line[cnt[2]]) {
-        tmp[cnt[2]] = line[cnt[2]];
-        cnt[2]++;
+    while (line && line[tab[1]]) {
+        relloc[tab[1]] = line[tab[1]];
+        tab[1]++;
     }
-    if (line != NULL)
-        free(line);
-    while (buff[cnt[1]] && buff[cnt[1]] != '\n') {
-        tmp[cnt[2] + cnt[1]] = buff[cnt[1]];
-        cnt[1]++;
+    while (buff && buff[tab[0]] && buff[tab[0]] != '\n') {
+        relloc[tab[1] + tab[0]] = buff[tab[0]];
+        tab[0]++;
     }
-    if (buff[0] == '\n' && tmp[0] == '\0')
-        tmp[cnt[2] + cnt[1]++] = '\n';
-    tmp[cnt[2] + cnt[1]] = '\0';
-    return (tmp);
-}
-
-void    sup_to_n(char *buff)
-{
-    int i = 0;
-    int j = 0;
-
-    while (buff[i] && buff[i++] != '\n');
-    while (buff[i]) {
-        buff[j] = buff[i];
-        i++;
-        j++;
+    relloc[tab[1] + tab[0]] = '\0';
+    (line) ? free(line) : 0;
+    if (!(tab[2])) {
+        tab[0] = read(fd, buff, READ_SIZE);
+        buff[tab[0]] = '\0';
+        (tab[0] > 0) ? relloc = next_line(fd, relloc, buff) : 0;
     }
-    while (buff[j])
-        buff[j++] = '\0';
-}
-
-char    *to_next_n(char *buff, char *line, int *size)
-{
-    int i = 0;
-
-    while (buff[i] && buff[i++] != '\n');
-    if (i - 1 >= 0 && buff[i - 1] == '\n')
-        *size = -1;
-    if ((line = malloc(i)) == NULL)
-        return (NULL);
-    i = 0;
-    while (buff[i] && buff[i] != '\n') {
-        line[i] = buff[i];
-        i++;
-    }
-    if (i == 0 && buff[0] == '\n')
-        line[i++] = '\n';
-    line[i] = '\0';
-    return (line);
+    return (relloc);
 }
 
 char    *get_next_line(int fd)
 {
-    static char buff[4096];
+    static char buff[READ_SIZE];
     char        *line = NULL;
     int         size = 0;
+    int         i = -1;
+    int         y = 0;
 
-    if (fd == -1)
+    if (fd == -1) {
+        while (buff[y])
+            buff[y++] = '\0';
         return (NULL);
-    line = to_next_n(buff, line, &size);
-    while (size >= 0 && back_slashn(buff, size) == -1) {
-        size = read(fd, buff, 4095);
-        (size != 0) ? line = concat(buff, line, size) : 0;
-        size = (size == 0) ? -1 : size;
     }
-    sup_to_n(buff);
-    size = 0;
-    if (line[0] == '\n') {
-        line[size] = '\0';
-        return (line);
+    line = next_line(fd, line, buff);
+    if (!buff[0] && (!line || !line[0]))
+        line = NULL;
+    while (buff[size] && buff[size++] != '\n');
+    while (buff[++i]) {
+        buff[i] = buff[i + size];
+        size = ((buff[i + size]) ? size : size - 1);
     }
-    if (line && line[0] == '\0' && buff[0] == '\0')
-        return (NULL);
     return (line);
 }

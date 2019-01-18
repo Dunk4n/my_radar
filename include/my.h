@@ -9,10 +9,11 @@
 #define MY_H
 
 # include <unistd.h>
-#include <stdarg.h>
+# include <stdarg.h>
 
 # define cmp(x, y, z) my_strncmp(x, y, z)
 # define ABS(x) (((x) < 0) ? -(x) : (x))
+# define READ_SIZE 4096
 
 typedef struct  linked_list_s
 {

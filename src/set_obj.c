@@ -24,16 +24,16 @@ int     *nb_obj(char *str, my_map_t *map)
     tab[0] = 0;
     tab[1] = 0;
     while (line) {
-        if (line[0] == 'A')
-            tab[0]++;
-        if (line[0] == 'T')
-            tab[1]++;
+        (line[0] == 'A') ? tab[0]++ : 0;
+        (line[0] == 'T') ? tab[1]++ : 0;
+        free(line);
         line = get_next_line(fd);
     }
     close(fd);
     map->nb_trans = tab[0];
     map->nb_trans_true = tab[0];
     map->nb_tour = tab[1];
+    get_next_line(-1);
     return (tab);
 }
 
@@ -106,13 +106,13 @@ void    set_all_obj(my_map_t *map, char *str)
     map->tour = malloc(sizeof(tour_t) * tab[1]);
     while (cnt[0] + cnt[1] < tab[0] + tab[1]) {
         line = my_str_to_word_array(get_next_line(fd), ' ');
-        if (line[0] && my_strcmp(line[0], "A") == 0) {
+        if (line[0] && my_strcmp(line[0], "A") == 0)
             set_trans(&(map->trans[cnt[0]]), line, cnt[0]);
-            cnt[0]++;
-        }
+        (line[0] && my_strcmp(line[0], "A") == 0) ? cnt[0]++ : 0;
         if (line[0] && my_strcmp(line[0], "T") == 0)
             set_tour(&(map->tour[cnt[1]++]), line);
         free_str_to_word_array(line, tab, fd, 0);
     }
     free_str_to_word_array(line, tab, fd, 1);
+    get_next_line(-1);
 }

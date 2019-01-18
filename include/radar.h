@@ -47,12 +47,19 @@ typedef struct  my_transport_s
     sfIntRect       rect;
     sfIntRect       rectp;
     sfRectangleShape *shape;
+    sfVector2f      *cord;
     float           alp;
     int             dead;
     int             pv;
     int             tmp;
     int             name;
 }               trans_t;
+
+typedef struct  storm_s
+{
+    sfVector2f  *pos;
+    int         nb_point;
+}               storm_t;
 
 typedef struct  tour_s
 {
@@ -65,7 +72,8 @@ typedef struct  tour_s
 
 typedef struct  split_s
 {
-    sfIntRect       rect;
+    sfVector2f      *cord;
+    sfVector2f      pos;
     trans_t         **tab;
 }               split_t;
 
@@ -76,14 +84,16 @@ typedef struct  my_map_s
     trans_t         *trans;
     tour_t          *tour;
     split_t         *split;
-    sfInt32         fgt;
-    sfInt32         fgk;
-    sfInt32         fgd;
+    storm_t         *storm;
+    sfInt64         fgt;
+    sfInt64         fgk;
+    sfInt64         fgd;
     long int        time;
     sfText          *txt;
     int             nb_trans;
     int             nb_trans_true;
     int             nb_tour;
+    int             nb_storm;
     int             fg_sprite;
     int             fg_hitbox;
     int             fg_bullet;
@@ -100,9 +110,10 @@ sfColor color);
 void    draw_circle(my_framebuff_t *buff, sfVector2i cnt, int *tab,
 sfColor color);
 void    draw_blob(my_framebuff_t *buff, sfVector2i cnt, int r, sfColor color);
-int     is_collision(sfIntRect r1, float alp1, sfIntRect r2, float alp2);
-double  plus_x(sfIntRect rec, float alp, int ch);
-double  plus_y(sfIntRect rec, float alp, int ch);
+int     is_collision(sfVector2f *r1, sfVector2f p1,
+sfVector2f *r2, sfVector2f p2);
+double  plus_x(sfVector2f *cord, sfVector2f pos, int ch);
+double  plus_y(sfVector2f *cord, sfVector2f pos, int ch);
 void    set_split(my_map_t *map, int i, int z, int j);
 void    set_all_split(my_map_t *map, int j);
 sfVector2i *set_circle(void);
@@ -120,6 +131,9 @@ void    set_img(trans_t *trans, char **line, int nb, int name);
 void    make_txt(my_map_t *map);
 void    set_rotation(trans_t *trans);
 void    bullet(my_map_t *map, int name, int bt);
+void    free_str_to_word_array(char **line, int *tab, int fd, int nb);
+void    storm(my_map_t *map, char *str);
+int     is_scollision(storm_t *st, sfVector2f *r2, sfVector2f p2);
 
 # define LM 1920
 # define HM 1080

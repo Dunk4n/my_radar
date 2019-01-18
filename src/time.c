@@ -14,8 +14,8 @@ void    settab(my_map_t *map, int nb)
     int m = 0;
 
     while (i < map->nb_trans) {
-        if (map->trans[i].dead == 0 && is_collision(map->trans[i].rectp,
-map->trans[i].alp, map->split[nb].rect, 0)) {
+        if (map->trans[i].dead == 0 && is_collision(map->trans[i].cord,
+map->trans[i].pos, map->split[nb].cord, map->split[nb].pos)) {
             (map->split[nb].tab[m] = &(map->trans[i]));
             m++;
         }
@@ -75,13 +75,13 @@ void    make_time(my_map_t *map)
 {
     int i = -1;
 
-    if (sfTime_asMilliseconds(sfClock_getElapsedTime(map->clock)) >= map->fgt) {
+    if (sfClock_getElapsedTime(map->clock).microseconds >= map->fgt) {
         all_collision(map);
         move_transport(map->trans, map->nb_trans);
         re_settab(map);
-        map->fgt += 16;
+        map->fgt += 16000;
     }
-    if (sfTime_asMilliseconds(sfClock_getElapsedTime(map->clock)) >= map->fgd) {
+    if (sfClock_getElapsedTime(map->clock).microseconds >= map->fgd) {
         make_txt(map);
         (map->fg_bullet > 0) ? map->fg_bullet-- : 0;
         while (++i < map->nb_trans) {
@@ -89,7 +89,6 @@ void    make_time(my_map_t *map)
                 map->trans[i].dead = 0;
             map->trans[i].tmp -= (map->trans[i].tmp < 0) ? 0 : 1;
         }
-        map->fgd = sfTime_asMilliseconds(sfClock_getElapsedTime(map->clock))
-+ 1000;
+        map->fgd = sfClock_getElapsedTime(map->clock).microseconds + 1000000;
     }
 }

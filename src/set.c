@@ -71,6 +71,7 @@ my_map_t        *set_map(char *str)
     int         j = 1;
 
     set_all_obj(map, str);
+    storm(map, str);
     if (map->trans == NULL) {
         my_printf("wrong file or path file\n");
         free(map);

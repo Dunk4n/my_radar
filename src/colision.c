@@ -11,61 +11,47 @@
 #include "my.h"
 #include "radar.h"
 
-double  plus_x(sfIntRect rec, float alp, int ch)
+double  plus_x(sfVector2f *cord, sfVector2f pos, int ch)
 {
-    int i = 1;
-    double p = rec.left + rec.width / 2;
-    double q = rec.top - rec.height / 2;
-    double teta = alp * M_PI / 180;
-    double cord[] = {(rec.left - p) * cos(teta) - (rec.top - q) * sin(teta) + p,
-(rec.left - p) * cos(teta) - (rec.top - rec.height - q) * sin(teta) + p,
-(rec.left + rec.width - p) * cos(teta) - (rec.top - q) * sin(teta) + p,
-(rec.left + rec.width - p) * cos(teta) - (rec.top - rec.height - q) *
-sin(teta) + p};
+    int         i = 1;
+    double      tmp = cord[0].x + pos.x;
 
     while (i < 4) {
-        if (ch == 0 && cord[i] < cord[0])
-            cord[0] = cord[i];
-        if (ch == 1 && cord[i] > cord[0])
-            cord[0] = cord[i];
+        if (ch == 0 && cord[i].x + pos.x < tmp)
+            tmp = cord[i].x + pos.x;
+        if (ch == 1 && cord[i].x + pos.x > tmp)
+            tmp = cord[i].x + pos.x;
         i++;
     }
-    return (cord[0]);
+    return (tmp);
 }
 
-double  plus_y(sfIntRect rec, float alp, int ch)
+double  plus_y(sfVector2f *cord, sfVector2f pos, int ch)
 {
-    int i = 1;
-    double p = rec.left + rec.width / 2;
-    double q = rec.top - rec.height / 2;
-    double teta = alp * M_PI / 180;
-    double cord[] = {(rec.left - p) * sin(teta) + (rec.top - q) * cos(teta) + q,
-(rec.left - p) * sin(teta) + (rec.top + rec.height - q) * cos(teta) + q,
-(rec.left + rec.width - p) * sin(teta) + (rec.top - q) * cos(teta) + q,
-(rec.left + rec.width - p) * sin(teta) + (rec.top + rec.height - q) *
-cos(teta) + q};
+    int         i = 1;
+    double      tmp = cord[0].y + pos.y;
 
     while (i < 4) {
-        if (ch == 0 && cord[i] < cord[0])
-            cord[0] = cord[i];
-        if (ch == 1 && cord[i] > cord[0])
-            cord[0] = cord[i];
+        if (ch == 0 && cord[i].y + pos.y < tmp)
+            tmp = cord[i].y + pos.y;
+        if (ch == 1 && cord[i].y + pos.y > tmp)
+            tmp = cord[i].y + pos.y;
         i++;
     }
-    return (cord[0]);
+    return (tmp);
 }
 
-int     is_collision(sfIntRect r1, float alp1, sfIntRect r2, float alp2)
+int     is_collision(sfVector2f *r1, sfVector2f p1,
+sfVector2f *r2, sfVector2f p2)
 {
-    double xp1 = (alp1 == 0) ? r1.left : plus_x(r1, alp1, 0);
-    double xg1 = (alp1 == 0) ? r1.left + r1.width : plus_x(r1, alp1, 1);
-    double xp2 = (alp2 == 0) ? r2.left : plus_x(r2, alp2, 0);
-    double xg2 = (alp2 == 0) ? r2.left + r2.width : plus_x(r2, alp2, 1);
-
-    double yp1 = (alp1 == 0) ? r1.top : plus_y(r1, alp1, 0);
-    double yg1 = (alp1 == 0) ? r1.top + r1.height : plus_y(r1, alp1, 1);
-    double yp2 = (alp2 == 0) ? r2.top : plus_y(r2, alp2, 0);
-    double yg2 = (alp2 == 0) ? r2.top + r2.height : plus_y(r2, alp2, 1);
+    double xp1 = plus_x(r1, p1, 0);
+    double xg1 = plus_x(r1, p1, 1);
+    double xp2 = plus_x(r2, p2, 0);
+    double xg2 = plus_x(r2, p2, 1);
+    double yp1 = plus_y(r1, p1, 0);
+    double yg1 = plus_y(r1, p1, 1);
+    double yp2 = plus_y(r2, p2, 0);
+    double yg2 = plus_y(r2, p2, 1);
 
     if ((xp2 <= xg1 && xg2 >= xp1) && (yp2 <= yg1 && yg2 >= yp1))
         return (1);
@@ -76,7 +62,7 @@ void    collision(trans_t *a, trans_t *b, my_map_t *map)
 {
     if (a->dead == 1 || b->dead == 1 || a->name == b->name)
         return ;
-    if (is_collision(a->rectp, a->alp, b->rectp, b->alp) &&
+    if (is_collision(a->cord, a->pos, b->cord, b->pos) &&
 !collision_circle(a, map) && !collision_circle(b, map)) {
         a->pv -= 1;
         b->pv -= 1;

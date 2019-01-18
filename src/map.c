@@ -64,12 +64,12 @@ int     update(my_map_t *map)
 {
     int i = 0;
 
-//    clear_buff(map->win->framebuff);
     sfRenderWindow_clear(map->win->window, sfBlack);
     sfRenderWindow_drawSprite(map->win->window, map->win->sprite, NULL);
     if (update_set_trans(map) == 1)
         return (1);
-    sfTexture_updateFromPixels(map->win->txpixel, map->win->framebuff->pixels, LM, HM, 0, 0);
+    sfTexture_updateFromPixels(map->win->txpixel, map->win->framebuff->pixels,
+LM, HM, 0, 0);
     sfRenderWindow_drawText(map->win->window, map->txt, NULL);
     while (map->fg_sprite == 0 && i < map->nb_tour)
         sfRenderWindow_drawSprite(map->win->window, map->tour[i++].sp, NULL);
