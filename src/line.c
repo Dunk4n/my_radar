@@ -43,8 +43,8 @@ void    draw_liney(my_framebuff_t *buff, sfVector2f *pos, int r, sfColor color)
 
 void    draw_line(my_framebuff_t *buff, sfVector2f *pos, int r, sfColor color)
 {
-    if (pos[0].x != pos[1].x)
+    if ((int)pos[0].x != (int)pos[1].x)
         draw_linex(buff, pos, r, color);
-    if (pos[0].y != pos[1].y)
+    if ((int)pos[0].y != (int)pos[1].y)
         draw_liney(buff, pos, r, color);
 }

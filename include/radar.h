@@ -40,7 +40,6 @@ typedef struct  my_window_s
 typedef struct  my_transport_s
 {
     sfTexture       *tx;
-    sfSprite        *sp;
     sfVector2f      pos;
     sfVector2f      pos_arv;
     sfVector2f      vit;
@@ -133,7 +132,8 @@ void    set_rotation(trans_t *trans);
 void    bullet(my_map_t *map, int name, int bt);
 void    free_str_to_word_array(char **line, int *tab, int fd, int nb);
 void    storm(my_map_t *map, char *str);
-int     is_scollision(storm_t *st, sfVector2f *r2, sfVector2f p2);
+void    draw_storm(my_map_t *map);
+void    all_scollision(my_map_t *map);
 
 # define LM 1920
 # define HM 1080

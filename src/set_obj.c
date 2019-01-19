@@ -44,9 +44,7 @@ void    set_trans(trans_t *trans, char **line, int name)
     trans->tmp = (i > 7) ? my_getnbr(line[6]) : 0;
     trans->dead = 1;
     trans->tx = sfTexture_create(20, 20);
-    trans->sp = sfSprite_create();
     set_img(trans, line, i, name);
-    sfSprite_setTexture(trans->sp, trans->tx, sfTrue);
     trans->rect.top = 0;
     trans->rect.left = 0;
     trans->pos.x = (i > 7) ? my_getfloat(line[1]) : 0;

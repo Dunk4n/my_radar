@@ -24,6 +24,7 @@ SRC	=	$(D_SRC)main.c			\
 		$(D_SRC)txt.c			\
 		$(D_SRC)bullet.c		\
 		$(D_SRC)storm.c			\
+		$(D_SRC)collision_storm.c	\
 		$(D_SRC)check.c
 
 OBJ	=	$(SRC:%.c=%.o)

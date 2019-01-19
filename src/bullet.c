@@ -36,9 +36,7 @@ void    set_bullet(trans_t *trans, sfVector2f pos, sfVector2f posa, int name)
     trans->tmp = 0;
     trans->dead = 1;
     trans->tx = sfTexture_create(10, 10);
-    trans->sp = sfSprite_create();
     set_bullet_vit(trans, pos, posa, name);
-    sfSprite_setTexture(trans->sp, trans->tx, sfTrue);
     trans->rect.top = 0;
     trans->rect.left = 0;
     trans->pos.x = pos.x;

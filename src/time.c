@@ -77,6 +77,7 @@ void    make_time(my_map_t *map)
 
     if (sfClock_getElapsedTime(map->clock).microseconds >= map->fgt) {
         all_collision(map);
+        all_scollision(map);
         move_transport(map->trans, map->nb_trans);
         re_settab(map);
         map->fgt += 16000;

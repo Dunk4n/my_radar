@@ -56,3 +56,28 @@ sfColor color)
         i++;
     }
 }
+
+void    storm_line(storm_t *st, my_map_t *map)
+{
+    int         i = 1;
+    sfVector2f  tmp[2];
+
+    while (i < st->nb_point) {
+        tmp[0] = st->pos[i - 1];
+        tmp[1] = st->pos[i];
+        draw_line(map->win->framebuff, tmp, 3, sfYellow);
+        i++;
+    }
+    tmp[0] = st->pos[0];
+    draw_line(map->win->framebuff, tmp, 3, sfYellow);
+}
+
+void    draw_storm(my_map_t *map)
+{
+    int i = 0;
+
+    while (i < map->nb_storm) {
+        storm_line(&(map->storm[i]), map);
+        i++;
+    }
+}

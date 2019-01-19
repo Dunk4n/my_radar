@@ -42,10 +42,9 @@ int     update_set_trans(my_map_t *map)
     int i = -1;
     int j = 0;
 
+    draw_storm(map);
     update_set_tour(map);
     while (++i < map->nb_trans) {
-        if (map->trans[i].dead == 0 && map->fg_sprite == 0)
-            sfSprite_setPosition(map->trans[i].sp, map->trans[i].pos);
         if (map->trans[i].dead == 0 && map->fg_hitbox == 0) {
             sfRectangleShape_setPosition(map->trans[i].shape,
 map->trans[i].pos);
@@ -74,10 +73,10 @@ LM, HM, 0, 0);
     while (map->fg_sprite == 0 && i < map->nb_tour)
         sfRenderWindow_drawSprite(map->win->window, map->tour[i++].sp, NULL);
     i = -1;
-    while (map->fg_sprite == 0 && ++i < map->nb_trans) {
-        if (map->trans[i].dead == 0)
-            sfRenderWindow_drawSprite(map->win->window, map->trans[i].sp, NULL);
-    }
+    //while (map->fg_sprite == 0 && ++i < map->nb_trans) {
+    //    if (map->trans[i].dead == 0)
+    //        sfRenderWindow_drawSprite(map->win->window, map->trans[i].sp, NULL);
+    //}
     sfRenderWindow_drawSprite(map->win->window, map->win->sppixel, NULL);
     sfRenderWindow_display(map->win->window);
     return (0);
@@ -91,7 +90,7 @@ int     map(char *str)
         return (84);
     map->time = 0;
     int i = 0;
-    while (map->split[0].tab[i]) {
+    /*while (map->split[0].tab[i]) {
         printf("dead: [%d], name: [%d]\n", map->split[0].tab[i]->dead,
 map->split[0].tab[i]->name);
         i++;
@@ -102,7 +101,7 @@ map->split[0].tab[i]->name);
         printf("dead: [%d], name: [%d]\n", map->split[1].tab[i]->dead,
 map->split[1].tab[i]->name);
         i++;
-    }
+    }*/
 
     map->clock = sfClock_create();
     map->fgt = sfTime_asMilliseconds(sfClock_getElapsedTime(map->clock));
@@ -114,7 +113,7 @@ map->split[1].tab[i]->name);
         check(map);
     }
 
-    printf("-----------------------\n");
+    /*printf("-----------------------\n");
     i = 0;
     while (map->split[0].tab[i]) {
         printf("dead: [%d], name: [%d]\n", map->split[0].tab[i]->dead,
@@ -127,6 +126,6 @@ map->split[0].tab[i]->name);
         printf("dead: [%d], name: [%d]\n", map->split[1].tab[i]->dead,
 map->split[1].tab[i]->name);
         i++;
-    }
+    }*/
     return (0);
 }
