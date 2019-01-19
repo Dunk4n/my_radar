@@ -55,7 +55,6 @@ void    set_rotation(trans_t *trans)
     shape = sfRectangleShape_create();
     sfRectangleShape_setSize(shape, factors);
     sfRectangleShape_setPosition(shape, trans->pos);
-    //sfRectangleShape_setFillColor(shape, sfTransparent);
     sfRectangleShape_setTexture(shape, trans->tx, sfTrue);
     sfRectangleShape_setOutlineThickness(shape, 3);
     sfRectangleShape_setOutlineColor(shape, sfRed);

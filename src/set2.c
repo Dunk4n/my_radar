@@ -65,8 +65,20 @@ void    set_all_split(my_map_t *map, int j)
 
 void    set_vit(trans_t *trans, char **line)
 {
-    trans->vit.x = my_getnbr(line[5]);
-    trans->vit.y = 0;
+    double a;
+
+    if (nb_str_in_array(line) < 7) {
+        trans->vit.x = 0;
+        trans->vit.y = 0;
+        trans->alp = 0;
+        return ;
+    }
+    a = (my_getfloat(line[4]) - my_getfloat(line[2])) /
+((my_getnbr(line[3]) - my_getnbr(line[1]) != 0) ? (my_getfloat(line[3]) -
+my_getfloat(line[1])) : 1);
+    trans->vit.x = (my_getnbr(line[5]) / sqrt(1 + pow(a, 2))) *
+((my_getnbr(line[3]) < my_getnbr(line[1])) ? -1 : 1);
+    trans->vit.y = trans->vit.x * a;
     trans->alp = atan2(my_getnbr(line[4]) - my_getnbr(line[2]),
 my_getnbr(line[3]) - my_getnbr(line[1])) * 180 / M_PI + 90;
     (trans->alp < 0) ? trans->alp += 360 : 0;

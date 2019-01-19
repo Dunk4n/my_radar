@@ -11,9 +11,9 @@
 
 int     check_key(my_map_t *map)
 {
-    if (sfTime_asMilliseconds(sfClock_getElapsedTime(map->clock)) < map->fgk)
+    if (sfClock_getElapsedTime(map->clock).microseconds < map->fgk)
         return (0);
-    map->fgk = sfTime_asMilliseconds(sfClock_getElapsedTime(map->clock)) + 200;
+    map->fgk = sfClock_getElapsedTime(map->clock).microseconds + 200000;
     if ((map->win->event).key.code == sfKeyL) {
         map->fg_hitbox = (map->fg_hitbox == 1) ? 0 : 1;
         return (1);

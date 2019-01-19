@@ -47,10 +47,10 @@ void    set_trans(trans_t *trans, char **line, int name)
     set_img(trans, line, i, name);
     trans->rect.top = 0;
     trans->rect.left = 0;
-    trans->pos.x = (i > 7) ? my_getfloat(line[1]) : 0;
-    trans->pos.y = (i > 7) ? my_getfloat(line[2]) : 0;
-    trans->pos_arv.x = (i > 7) ? my_getfloat(line[3]) : 0;
-    trans->pos_arv.y = (i > 7) ? my_getfloat(line[4]) : 0;
+    trans->pos.x = (i > 1) ? my_getfloat(line[1]) : 0;
+    trans->pos.y = (i > 2) ? my_getfloat(line[2]) : 0;
+    trans->pos_arv.x = (i > 3) ? my_getfloat(line[3]) : 0;
+    trans->pos_arv.y = (i > 4) ? my_getfloat(line[4]) : 0;
     set_vit(trans, line);
     trans->rectp.left = trans->pos.x;
     trans->rectp.top = trans->pos.y;

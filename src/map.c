@@ -45,14 +45,17 @@ int     update_set_trans(my_map_t *map)
     draw_storm(map);
     update_set_tour(map);
     while (++i < map->nb_trans) {
-        if (map->trans[i].dead == 0 && map->fg_hitbox == 0) {
+        sfRectangleShape_setFillColor(map->trans[i].shape, (map->fg_sprite == 0)
+? sfWhite : sfTransparent);
+        sfRectangleShape_setOutlineColor(map->trans[i].shape,
+(map->fg_hitbox == 0) ? sfRed : sfTransparent);
+        if (map->trans[i].dead == 0) {
             sfRectangleShape_setPosition(map->trans[i].shape,
 map->trans[i].pos);
             sfRenderWindow_drawRectangleShape(map->win->window,
 map->trans[i].shape, NULL);
         }
-        if (map->trans[i].dead == 0 || map->trans[i].tmp > 0)
-            j = 1;
+        (map->trans[i].dead == 0 || map->trans[i].tmp > 0) ? j = 1 : 0;
     }
     if (j == 0)
         return (1);
@@ -104,8 +107,8 @@ map->split[1].tab[i]->name);
     }*/
 
     map->clock = sfClock_create();
-    map->fgt = sfTime_asMilliseconds(sfClock_getElapsedTime(map->clock));
-    map->fgk = sfTime_asMilliseconds(sfClock_getElapsedTime(map->clock));
+    map->fgt = sfClock_getElapsedTime(map->clock).microseconds;
+    map->fgk = sfClock_getElapsedTime(map->clock).microseconds;
     while (sfRenderWindow_isOpen(map->win->window)) {
         make_time(map);
         if (update(map) == 1)
