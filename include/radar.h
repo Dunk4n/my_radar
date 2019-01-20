@@ -16,6 +16,10 @@
 #include <SFML/System/Types.h>
 #include "my.h"
 
+#define PP(x, y) (((x) < (y)) ? (x) : (y))
+#define PG(x, y) (((x) > (y)) ? (x) : (y))
+#define DIV(x, y) ((x) / ((y == 0) ? 1 : y))
+
 const char *img_name[5];
 
 typedef struct  my_framebuff_s

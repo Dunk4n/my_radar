@@ -69,6 +69,7 @@ void    bullet(my_map_t *map, int name, int bt)
 map->trans[name].rect.width / 2 - 20 - 500, map->trans[name].pos.y};
     int         nb = nb_bullet(map);
 
+    (void)bt;
     if (nb >= map->nb_trans_true + 100 || nb < 0)
         return ;
     map->fg_bullet = 3;

@@ -8,37 +8,31 @@
 #include "radar.h"
 #include "my.h"
 
-int     colls(sfVector2f *tmp, sfVector2f *rc, sfVector2f ps)
+int     colls(sfVector2f *tp, sfVector2f *rc, sfVector2f ps)
 {
-    double a1 = ((rc[0].y + ps.y) - (rc[2].y + ps.y)) / (-(rc[2].x + ps.x) -
-(rc[0].x + ps.x));
+    double a1 = DIV(rc[0].y + ps.y * 2 - rc[2].y, rc[0].x + ps.x * 2 - rc[2].x);
     double b1 = (rc[0].y + ps.y) - a1 * (rc[0].x + ps.x);
-    double a2 = (tmp[0].y - tmp[1].y) / (-tmp[1].x - tmp[0].x);
-    double b2 = tmp[0].y - a2 * tmp[0].x;
-    double x = (b2 - b1) / (a1 - a2);
-    double petit = (rc[0].x + ps.x <= rc[2].x + ps.x) ?
-(rc[0].x + ps.x) : (rc[2].x + ps.x);
-    double grand = (rc[0].x + ps.x > rc[2].x + ps.x) ?
-(rc[0].x + ps.x) : (rc[2].x + ps.x);
-    /*double x2 = (b2 - ((rc[1].y + ps.y) - a1 * (rc[1].x + ps.x))) / ((((rc[1].y
-+ ps.y) - (rc[3].y + ps.y)) / (-(rc[3].x + ps.x) - (rc[1].x + ps.x))) - a2);
-    double petit2 = (rc[1].x + ps.x <= rc[3].x + ps.x) ?
-(rc[1].x + ps.x) : (rc[3].x + ps.x);
-    double grand2 = (rc[1].x + ps.x > rc[3].x + ps.x) ?
-(rc[1].x + ps.x) : (rc[3].x + ps.x);*/
-    double petit3 = (tmp[0].x <= tmp[1].x) ? tmp[0].x : tmp[1].x;
-    double grand3 = (tmp[0].x > tmp[1].x) ? tmp[0].x : tmp[1].x;
+    double a2 = DIV(rc[1].y + ps.y * 2 - rc[3].y, rc[1].x + ps.x * 2 - rc[3].x);
+    double b2 = (rc[1].y + ps.y) - a2 * (rc[1].x + ps.x);
+    double a3 = DIV(tp[0].y - tp[1].y, tp[0].x - tp[1].x);
+    double b3 = tp[0].y - a3 * tp[0].x;
+    int x1 = DIV(b3 - b1, a1 - a3);
+    int x2 = DIV(b3 - b2, a2 - a3);
 
-//    printf("x: %.1f, p: %.1f, g: %.1f, p3: %.1f, g3: %.1f\n\n",
-//            x, petit, grand, petit3, grand3);
-    if ((x >= petit && x <= grand && x >= petit3 && x <= grand3)/* ||
-(x2 >= petit2 && x2 <= grand2 && x2 >= petit3 && x2 <= grand3)*/) {
+    if ((PP(rc[0].x, rc[2].x) + ps.x - 2 <= x1 && x1 <= PG(rc[0].x, rc[2].x) +
+ps.x + 2 && PP(tp[0].x, tp[1].x) - 2 <= x1 && x1 <= PG(tp[0].x, tp[1].x) + 2 &&
+PP(rc[0].y, rc[2].y) + ps.y - 2 <= x1 * a1 + b1 && x1 * a1 + b1 <= PG(rc[0].y,
+rc[2].y) + ps.y + 2 && PP(tp[0].y, tp[1].y) - 2 <= x1 * a1 + b1 && x1 * a1 + b1
+<= PG(tp[0].y, tp[1].y) + 2) || (PP(rc[1].x, rc[3].x) + ps.x - 2 <= x2 && x2 <=
+PG(rc[1].x, rc[3].x) + ps.x + 2 && PP(tp[0].x, tp[1].x) - 2 <= x2 && x2 <=
+PG(tp[0].x, tp[1].x) + 2 && PP(rc[1].y, rc[3].y) + ps.y - 2 <= x2 * a2 + b2 &&
+x2 * a2 + b2 <= PG(rc[1].y, rc[3].y) + ps.y + 2 && PP(tp[0].y, tp[1].y) - 2 <=
+x2 * a2 + b2 && x2 * a2 + b2 <= PG(tp[0].y, tp[1].y) + 2))
         return (1);
-    }
     return (0);
 }
 
-int     is_scollision(storm_t *st, sfVector2f *r2, sfVector2f p2)
+int     is_scollision(storm_t *st, sfVector2f *rc, sfVector2f ps)
 {
     int         i = 1;
     sfVector2f  tmp[2];
@@ -46,15 +40,12 @@ int     is_scollision(storm_t *st, sfVector2f *r2, sfVector2f p2)
     while (i < st->nb_point) {
         tmp[0] = st->pos[i - 1];
         tmp[1] = st->pos[i];
-        //printf("X: %.1f, %.1f\n", p2.x, p2.y);
-        //printf("i: [%d], %.1f, %.1f\n", i, tmp[0].x, tmp[1].x);
-        //if (colls(tmp, r2, p2))
-        //    printf("la------------------------------------------------------------------\n");
-            //return (1);
+        if (colls(tmp, rc, ps))
+            return (1);
         i++;
     }
     tmp[0] = st->pos[0];
-    if (colls(tmp, r2, p2))
+    if (colls(tmp, rc, ps))
             return (1);
     return (0);
 }
