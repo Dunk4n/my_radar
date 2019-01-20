@@ -21,7 +21,7 @@ int deletes_nodes(linked_list_t **begin, void const *data_ref, int (*cmp)())
     if ((*cmp)(tmp->data, data_ref) == 1) {
         *begin = (*begin)->next;
         free(tmp);
-        return(0);
+        return (0);
     }
     delet = tmp->next;
     while (delet) {

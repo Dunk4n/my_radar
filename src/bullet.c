@@ -52,7 +52,7 @@ int     nb_bullet(my_map_t *map)
 {
     int i = map->nb_trans_true;
 
-    while(i < map->nb_trans) {
+    while (i < map->nb_trans) {
         if (map->trans[i].dead == 1)
             return (i);
         i++;

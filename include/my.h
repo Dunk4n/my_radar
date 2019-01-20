@@ -24,7 +24,7 @@ typedef struct  linked_list_s
 int     my_putchar(char c);
 int     my_isneg (int nb);
 int     my_put_nbr (int nb);
-void    my_swap(int *a ,int *b);
+void    my_swap(int *a, int *b);
 int     my_putstr(char const *str);
 int     my_strlen(char const *str);
 int     my_getnbr(char const *str);
