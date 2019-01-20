@@ -78,7 +78,7 @@ void    merge(linked_list_t **begin1, linked_list_t *begin2, int (*cmp)());
 int     list_size(linked_list_t const *begin);
 linked_list_t   *find_node(linked_list_t const *begin,
 void const *data_ref, int (*cmp)());
-int     deletes_nodes(linked_list_t **begin, void const *data_ref,
+void    deletes_nodes(linked_list_t **begin, void const *data_ref,
 int (*cmp)());
 void    concat_list(linked_list_t **begin1, linked_list_t *begin2);
 int     apply_on_nodes(linked_list_t *begin, int (*f)(void *));

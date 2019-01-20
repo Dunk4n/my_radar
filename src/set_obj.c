@@ -100,7 +100,7 @@ void    set_all_obj(my_map_t *map, char *str)
     (fd == -1) ? map->trans = NULL : 0;
     if (fd == -1)
         return ;
-    map->trans = malloc(sizeof(trans_t) * (tab[0] + 100));
+    map->trans = malloc(sizeof(trans_t) * (tab[0]));
     map->tour = malloc(sizeof(tour_t) * tab[1]);
     while (cnt[0] + cnt[1] < tab[0] + tab[1]) {
         line = my_str_to_word_array(get_next_line(fd), ' ');

@@ -73,7 +73,7 @@ my_map_t        *set_map(char *str)
     set_all_obj(map, str);
     storm(map, str);
     if (map->trans == NULL) {
-        my_printf("wrong file or path file\n");
+        write(2, "wrong file or path file\n", 24);
         free(map);
         return (NULL);
     }

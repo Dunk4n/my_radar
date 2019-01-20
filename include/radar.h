@@ -143,7 +143,6 @@ void    all_scollision(my_map_t *map);
 # define HM 1080
 
 # define NB 1
-//seulement un nombre qui n'est pas un nombre premier
-# define SP 2
+# define SP 25
 
 #endif
