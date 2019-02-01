@@ -24,8 +24,8 @@ int     *nb_obj(char *str, my_map_t *map)
     tab[0] = 0;
     tab[1] = 0;
     while (line) {
-        (line[0] == 'A') ? tab[0]++ : 0;
-        (line[0] == 'T') ? tab[1]++ : 0;
+        (line[0] == 'A' && line[1] == ' ') ? tab[0]++ : 0;
+        (line[0] == 'T' && line[1] == ' ') ? tab[1]++ : 0;
         free(line);
         line = get_next_line(fd);
     }
